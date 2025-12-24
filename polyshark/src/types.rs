@@ -33,9 +33,9 @@ pub struct Market {
 // But order books are separate, so prices differ.
 
 #[derive(Debug, Clone , Serialize , Deserialize)]
-pyb struct PriceLevel { 
+pub struct PriceLevel { 
     pub price : f64 , 
-    pub size : u64 
+    pub size : f64   // Changed to f64 to match execution_price logic
 }
 
 // Order book for a single token 
@@ -51,7 +51,7 @@ pyb struct PriceLevel {
 pub struct OrderBook { 
     pub token_id : String , 
     pub bids : Vec<PriceLevel> , 
-    pub asks : Vec<PriceLevel> 
+    pub asks : Vec<PriceLevel> ,  // Added missing comma
     pub timestamp : u64 
 }
 
@@ -62,7 +62,7 @@ pub struct OrderBook {
 pub struct Trade {
     pub id : String , 
     pub token_id : String , 
-    pub price : f64  
+    pub price : f64 ,   // Added missing comma
     pub size : f64 , 
     pub side : Side , 
     pub timestamp : u64 
@@ -167,12 +167,12 @@ impl OrderBook {
     }
 
     // get total liquidity on the bid side 
-    pub fn total_bid_liquidity(&self) -> Option<f64> {
+    pub fn total_bid_liquidity(&self) -> f64 {
         self.bids.iter().map(|l| l.size).sum()
     }
 
     // get total liquidity on the ask side 
-    pub fn total_ask_liquidity(&self) -> Option<f64> {
+    pub fn total_ask_liquidity(&self) -> f64 {
         self.asks.iter().map(|l| l.size).sum()
     }
 
