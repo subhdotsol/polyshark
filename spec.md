@@ -634,8 +634,9 @@ impl ExecutionEngine {
 No traits needed for this implementation — all functionality is via struct impls. You can add traits later for testing/mocking (e.g., `trait Exchange`, `trait WalletOps`).
 
 
-## File structure 
+## File Structure
 
+```
 polyshark/
 ├── Cargo.toml
 ├── src/
@@ -653,10 +654,13 @@ polyshark/
 │   └── websocket.rs      # Optional: real-time streaming
 └── tests/
     └── integration.rs    # Integration tests
+```
 
+---
 
-## module dependencies 
+## Module Dependencies
 
+```
 main.rs
   └── engine (trading loop)
         ├── gamma.rs  ──────> types.rs (Market)
@@ -667,16 +671,23 @@ main.rs
               ├── fees.rs      ──> types.rs (Market)
               ├── slippage.rs  ──> types.rs (OrderBook, Side)
               └── fills.rs     ──> types.rs (OrderBook, Side)
+```
+
+---
 
 ## Order of Implementation
-- types.rs — Define all shared structs first
-- wallet.rs — Local simulation (no API needed)
-- fees.rs — Simple calculations
-- slippage.rs — Uses OrderBook
-- fills.rs — Uses OrderBook
-- constraint.rs — Uses Market
-- gamma.rs — API client for markets
-- clob.rs — API client for order books
-- arb.rs — Combines constraint + market data
-- execution.rs — Combines fees + slippage + fills + wallet
-- main.rs — Wire everything together
+
+| Step | File | Description |
+|------|------|-------------|
+| 1 | `types.rs` | Define all shared structs first |
+| 2 | `wallet.rs` | Local simulation (no API needed) |
+| 3 | `fees.rs` | Simple calculations |
+| 4 | `slippage.rs` | Uses OrderBook |
+| 5 | `fills.rs` | Uses OrderBook |
+| 6 | `constraint.rs` | Uses Market |
+| 7 | `gamma.rs` | API client for markets |
+| 8 | `clob.rs` | API client for order books |
+| 9 | `arb.rs` | Combines constraint + market data |
+| 10 | `execution.rs` | Combines fees + slippage + fills + wallet |
+| 11 | `main.rs` | Wire everything together |
+
