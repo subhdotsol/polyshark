@@ -290,3 +290,91 @@ Equity = Cash + Σ(Position_Size × Current_Price)
 | Slippage | `|exec - mid| / mid` |
 | Expected Profit | `edge - fees - slippage` |
 | Fill Ratio | `liquidity / size` |
+
+---
+
+## 📁 Formula → Code Mapping
+
+### `types.rs`
+
+| Formula | Struct/Function | Code |
+|---------|-----------------|------|
+| Best Bid | `OrderBook::best_bid()` | `bids.first().map(\|l\| l.price)` |
+| Best Ask | `OrderBook::best_ask()` | `asks.first().map(\|l\| l.price)` |
+| Midpoint | `OrderBook::midpoint()` | `(bid + ask) / 2.0` |
+| Bid-Ask Spread | `OrderBook::spread()` | `ask - bid` |
+| Total Bid Liquidity | `OrderBook::total_bid_liquidity()` | `bids.iter().map(\|l\| l.size).sum()` |
+| Total Ask Liquidity | `OrderBook::total_ask_liquidity()` | `asks.iter().map(\|l\| l.size).sum()` |
+| VWAP Execution | `OrderBook::execution_price()` | Walk book, `total_cost / size` |
+| Arb Spread | `Market::get_spread()` | `\|sum - 1.0\|` |
+| Is Balanced | `Market::is_balanced()` | `(sum - 1.0).abs() < 0.001` |
+| YES Price | `Market::yes_price()` | `outcome_prices[0]` |
+| NO Price | `Market::no_price()` | `outcome_prices[1]` |
+| Taker Fee Rate | `Market::taker_fee_rate()` | `taker_base_fee / 10000.0` |
+
+---
+
+### `fees.rs`
+
+| Formula | Struct/Function | Code |
+|---------|-----------------|------|
+| Fee Calculation | `FeeModel::calculate()` | `notional × (bps / 10000.0)` |
+| Taker Rate | `FeeModel::taker_rate()` | `taker_fee_bps / 10000.0` |
+
+---
+
+### `slippage.rs`
+
+| Formula | Struct/Function | Code |
+|---------|-----------------|------|
+| Slippage | `SlippageModel::calculate()` | `(exec_price - midpoint) / midpoint` |
+| Execution Cost | `SlippageModel::execution_cost()` | `exec_price × size` |
+
+---
+
+### `fills.rs`
+
+| Formula | Struct/Function | Code |
+|---------|-----------------|------|
+| Fill Ratio | `FillModel::estimate_fill_ratio()` | `min(1.0, available / size)` |
+| Filled Size | `FillModel::filled_size()` | `requested_size × ratio` |
+
+---
+
+### `constraint.rs`
+
+| Formula | Struct/Function | Code |
+|---------|-----------------|------|
+| Arbitrage Check | `ConstraintChecker::check_violation()` | `spread > min_threshold` |
+| Recommended Side | Logic | `sum > 1 → Sell, sum < 1 → Buy` |
+
+---
+
+### `arb.rs`
+
+| Formula | Struct/Function | Code |
+|---------|-----------------|------|
+| Scan Markets | `ArbitrageDetector::scan()` | Filter active + check violations |
+| Expected Profit | `ArbitrageDetector::expected_profit()` | `gross - fee_cost - slippage_cost` |
+| Should Trade | `ArbitrageDetector::should_trade()` | `expected_profit > min_threshold` |
+
+---
+
+### `execution.rs`
+
+| Formula | Struct/Function | Code |
+|---------|-----------------|------|
+| Slippage | `ExecutionEngine::execute()` | `\|(exec - mid) / mid\|` |
+| Total Cost | `ExecutionEngine::execute()` | `notional + fee` |
+| Can Afford | Check | `wallet.usdc >= total_cost` |
+
+---
+
+### `wallet.rs`
+
+| Formula | Struct/Function | Code |
+|---------|-----------------|------|
+| Equity | `Wallet::equity()` | `usdc + Σ(pos.size × current_price)` |
+| PnL | `Wallet::pnl()` | `equity - starting_balance` |
+| Win Rate | `Wallet::win_rate()` | `winning_trades / total_trades` |
+| Close Position PnL | `Wallet::close_position()` | `(exit - entry) × size` (Buy) |
