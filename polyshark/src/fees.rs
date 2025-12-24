@@ -1,3 +1,5 @@
+use crate::types::Market;
+
 /// Fee model based on Polymarket fee structure
 #[derive(Debug, Clone)]
 pub struct FeeModel {

@@ -1,3 +1,6 @@
+use crate::constraint::ConstraintChecker;
+use crate::types::{ArbitrageSignal, Market};
+
 /// Arbitrage detector
 #[derive(Debug)]
 pub struct ArbitrageDetector {

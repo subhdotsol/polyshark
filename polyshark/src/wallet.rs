@@ -5,21 +5,21 @@ use crate::types::Side;
 #[derive(Debug, Clone)]
 // fake wallet just a variable
 pub struct Wallet {
-    pub usdc : f64 ,     // cash balance
-    pub positions : HashMap<String , Position>  // token_id -> Position
-    pub starting_balance : f64 , 
-    pub total_Fees_paid : f64  
-    pub total_trades : u64 ,
-    pub winning_trades : u64 
+    pub usdc: f64,                              // cash balance
+    pub positions: HashMap<String, Position>,   // token_id -> Position
+    pub starting_balance: f64,
+    pub total_fees_paid: f64,
+    pub total_trades: u32,
+    pub winning_trades: u32,
 }
 
 #[derive(Debug, Clone)]
 pub struct Position {
-    pub token_id : String , 
-    pub side : String , 
-    pub size : f64 , 
-    pub entry_price : f64 , 
-    pub entry_time : u64 
+    pub token_id: String,
+    pub side: Side,          // Changed from String to Side
+    pub size: f64,
+    pub entry_price: f64,
+    pub entry_time: u64,
 }
 
 impl Wallet {

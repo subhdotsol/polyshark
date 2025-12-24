@@ -1,3 +1,5 @@
+use crate::types::{OrderBook, Side};
+
 /// Fill rate estimator
 #[derive(Debug, Clone)]
 pub struct FillModel;

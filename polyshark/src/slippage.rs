@@ -1,3 +1,5 @@
+use crate::types::{OrderBook, Side};
+
 /// Slippage calculator using order book
 #[derive(Debug, Clone)]
 pub struct SlippageModel;

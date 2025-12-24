@@ -1,3 +1,8 @@
+use crate::fees::FeeModel;
+use crate::fills::FillModel;
+use crate::types::{ExecutionResult, OrderBook, Side};
+use crate::wallet::Wallet;
+
 /// Execution simulator
 #[derive(Debug)]
 pub struct ExecutionEngine {
@@ -43,7 +48,7 @@ impl ExecutionEngine {
         wallet.record_fee(fee);
 
         Some(ExecutionResult {
-            filled_size,
+            filed_size: filled_size,
             execution_price: exec_price,
             fee_paid: fee,
             slippage,

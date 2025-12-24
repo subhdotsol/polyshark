@@ -1,3 +1,5 @@
+use crate::types::{ArbitrageSignal, Market, Side};
+
 /// Binary market constraint checker
 #[derive(Debug, Clone)]
 pub struct ConstraintChecker {

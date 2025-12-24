@@ -69,7 +69,7 @@ pub struct Trade {
 }
 
 // Order side 
-#[derive(Debug, Clone, PartialEq , Serialize , Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum Side { 
     Buy , 
     Sell 
@@ -105,15 +105,15 @@ pub struct ExecutionResult {
 
 impl Market {
 
-    // check if the price sum to exactly 1.9 (no arbitrage)
+    // check if the price sum to exactly 1.0 (no arbitrage)
     pub fn is_balanced(&self) -> bool {
-        let sum = self.outcome_prices.iter().sum();
+        let sum: f64 = self.outcome_prices.iter().sum();
         (sum - 1.0).abs() < 0.001
     }
 
     // get the spread (deviation from balanced)
     pub fn get_spread(&self) -> f64 {
-        let sum = self.outcome_prices.iter().sum();
+        let sum: f64 = self.outcome_prices.iter().sum();
         (sum - 1.0).abs()
     }
 
